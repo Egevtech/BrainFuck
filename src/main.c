@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 
+// TODO: Move Token operations and vector from this file
 typedef enum {
   PLUS,
   MINUS,
