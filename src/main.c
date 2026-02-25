@@ -128,14 +128,14 @@ int main(const int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  int t;
+  int symbol;
   int char_count = 0;
   TokenVector tokens = make_vector();
 
-  while ((t = fgetc(file)) != EOF) {
-    if (isspace(t))
+  while ((symbol = fgetc(file)) != EOF) {
+    if (isspace(symbol))
       continue;
-    const Token *token = parse_token(t);
+    const Token *token = parse_token(symbol);
     char_count++;
 
     if (token == NULL) {
