@@ -109,7 +109,7 @@ Token *vector_pop(TokenVector* vec) {
   return &vec->data[vec->len - 1];
 }
 
-int main(int argc, char **argv) 
+int main(const int argc, char **argv)
 {
   printf("BFC - brainfuck compiler\n");
 
