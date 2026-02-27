@@ -49,7 +49,7 @@ Token *parse_token(int sym) {
 
     default:
       printf("... nothing?\nUnexpected token: '%c'\n", sym);
-      return nullptr;
+      return NULL;
   }
 }
 
@@ -63,10 +63,8 @@ typedef struct {
 } TokenVector;
 
 TokenVector make_vector(void) {
-  constexpr size_t t = sizeof(Token);
-
   const TokenVector tv = {
-    .data = malloc(t),
+    .data = malloc(sizeof(Token)),
     .len = 0,
     .capacity = sizeof(Token),
     .element_size = sizeof(Token),
@@ -107,7 +105,7 @@ void vector_push(TokenVector* vec, const Token token)
 Token *vector_pop(TokenVector* vec) {
   if ( vec->len == 0 ) {
     printf("Trying to pop an empty vector!\n");
-    return nullptr;
+    return NULL;
   }
 
   vec->len--;
@@ -166,7 +164,7 @@ int main(const int argc, char **argv)
   printf("Opening output file %s\n", (char*)output_file);
   FILE* output = fopen(output_file, "w");
 
-  if (output == nullptr) {
+  if (output == NULL) {
     printf("Can't open output file\n");
     free(output_file);
     return EXIT_FAILURE;
@@ -239,7 +237,7 @@ int main(const int argc, char **argv)
   printf("Building... ");
 
   FILE* build_cmd_pipe = popen(compile_cmd, "r");
-  if ( build_cmd_pipe == nullptr) {
+  if ( build_cmd_pipe == NULL) {
     printf("fail\nError opening pipe for building\n");
     free(compile_cmd);
     free(link_cmd);
@@ -264,7 +262,7 @@ int main(const int argc, char **argv)
   printf("Linking... ");
 
   FILE* link_cmd_pipe = popen(link_cmd, "r");
-  if ( link_cmd_pipe == nullptr)
+  if ( link_cmd_pipe == NULL)
   {
     printf("fail\nError opening pipe for linking\n");
     free(link_cmd);

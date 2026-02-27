@@ -6,14 +6,14 @@ struct DataVector
     size_t capacity;
     int* data;
 
-    size_t len;
+    int len;
 };
 
 struct DataVector *vector_init(void)
 {
     struct DataVector *ret_vector = malloc(sizeof(struct DataVector));
 
-    if (ret_vector == nullptr) {
+    if (ret_vector == NULL) {
         printf("Memory allocation failed!\n");
         exit(EXIT_FAILURE);
     }
@@ -82,9 +82,8 @@ void next_cell(struct DataVector* vec, int *current_cell)
 
 }
 
-void prev_cell(struct DataVector* vec, int *current_cell)
+void prev_cell(struct DataVector *, int *current_cell)
 {
-    // printf("prev_cell\n");
     if (*current_cell == 0)
     {
         printf("No space to move left!\n");
@@ -96,27 +95,21 @@ void prev_cell(struct DataVector* vec, int *current_cell)
 }
 
 void add_cell(struct DataVector* vec, const int *current_cell) {
-    // printf("add_sell\n");
     vector_set(vec, *current_cell, vector_get(vec, *current_cell) + 1);
 }
 
 void sub_cell(struct DataVector *vec, const int *current_cell) {
-    // printf("sub_sell\n");
     vector_set(vec, *current_cell, vector_get(vec, *current_cell) - 1);
 }
 
 void print_cell(struct DataVector *vec, int *current_cell) {
-
-    // printf("Cell summary: %d\n", vector_get(vec, *current_cell));
     printf("%c", vector_get(vec, *current_cell));
 }
 
-void print_num(struct DataVector *vec, int *current_cell)
-{
+void print_num(struct DataVector *vec, int *current_cell) {
     printf("%d", vector_get(vec, *current_cell));
 }
 
-void print_num_ln(struct DataVector *vec, int *current_cell)
-{
+void print_num_ln(struct DataVector *vec, int *current_cell) {
     printf("%d\n", vector_get(vec, *current_cell));
 }

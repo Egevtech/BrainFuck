@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.31.6) # Ubuntu, f- u!
 
 project(BFC)
 
+set(CMAKE_C_STANDARD 23)
+set(CMAKE_C_EXTENSIONS on)
+
 add_executable(
     bfc
 
