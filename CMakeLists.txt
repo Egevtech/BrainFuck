@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.31.10)
+cmake_minimum_required(VERSION 3.31.6) # Ubuntu, f- u!
 
 project(BFC)
 
