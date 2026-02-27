@@ -1,3 +1,4 @@
+<a name="EN"></a>
 # BrainFuck compiler [EN/[RU](#RU)]
 This repository contains my implementation of brainfuck compiler
 
@@ -24,7 +25,7 @@ But, there are also some custom ones:
 - `P` - similar to `p`, but with `\n` added to the end
 
 <a name="RU"></a>
-# Компилятор BrainFuck
+# Компилятор BrainFuck[[EN](#EN)/RU]
 В этом репозитории находится моя версия компилятора языка программирования BrainFuck
 
 > [!WARNING]
