@@ -1,4 +1,4 @@
-# BrainFuck compiler [EN/[RU](RU)]
+# BrainFuck compiler [EN/[RU](#RU)]
 This repository contains my implementation of brainfuck compiler
 
 > [!WARNING]
