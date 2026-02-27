@@ -4,8 +4,7 @@ This repository contains my implementation of brainfuck compiler
 > [!WARNING]
 > This project currently in development stage
 
-## Project stat
-
+## Project status
 - [X] Compiling brainfuck code into assembler 
 - [X] Building executable file
 - [ ] Loop instructions
