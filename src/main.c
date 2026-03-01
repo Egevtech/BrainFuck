@@ -25,9 +25,14 @@ Token *parse_token(int sym) {
   switch (sym) {
     REG_TOKEN('+', PLUS);
     REG_TOKEN('-', MINUS);
+
     REG_TOKEN('>', NEXT);
     REG_TOKEN('<', PREV);
+
     REG_TOKEN('.', PRINT);
+    REG_TOKEN('c', PRINT);
+    REG_TOKEN('C', PRINT_LN);
+
     REG_TOKEN('p', PRINT_NUMERICAL);
     REG_TOKEN('P', PRINT_NUMERICAL_LN);
 
@@ -116,8 +121,9 @@ int main(const int argc, char **argv) {
       TOKEN2CALL(NEXT, next_cell);
       TOKEN2CALL(PREV, prev_cell);
       TOKEN2CALL(PRINT, print_cell);
-      TOKEN2CALL(PRINT_NUMERICAL, print_num);
-      TOKEN2CALL(PRINT_NUMERICAL_LN, print_num_ln);
+      TOKEN2CALL(PRINT_LN, print_cell_ln);
+      TOKEN2CALL(PRINT_NUMERICAL, print_cell_num);
+      TOKEN2CALL(PRINT_NUMERICAL_LN, print_cell_num_ln);
     }
 
     fprintf(output, "\tmov rdi, [vec]\n\tmov rsi, cell\n\tcall %s\n\n",

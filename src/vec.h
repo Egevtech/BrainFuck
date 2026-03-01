@@ -11,6 +11,8 @@ typedef enum {
     PREV,
 
     PRINT,
+    PRINT_LN,
+
     PRINT_NUMERICAL,
     PRINT_NUMERICAL_LN,
 } Token;

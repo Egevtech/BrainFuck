@@ -106,10 +106,16 @@ void print_cell(struct DataVector *vec, int *current_cell) {
     printf("%c", vector_get(vec, *current_cell));
 }
 
-void print_num(struct DataVector *vec, int *current_cell) {
+void print_cell_ln(struct DataVector *vec, int *current_cell) {
+    print_cell(vec, current_cell);
+    printf("\n");
+}
+
+void print_cell_num(struct DataVector *vec, int *current_cell) {
     printf("%d", vector_get(vec, *current_cell));
 }
 
-void print_num_ln(struct DataVector *vec, int *current_cell) {
-    printf("%d\n", vector_get(vec, *current_cell));
+void print_cell_num_ln(struct DataVector *vec, int *current_cell) {
+    print_cell_num(vec, current_cell);
+    printf("\n");
 }
