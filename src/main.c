@@ -13,35 +13,23 @@
 #define BFSTD "./libbfstd.a"
 #endif
 
-#define RET_TOKEN(token_name)                                                  \
-  result = token_name;                                                         \
-  return &result;                                                              \
-  break
+#define REG_TOKEN(symbol, token_name) \
+  case symbol \
+    result = token_name; \
+    return &result; \
+    break
 
 Token *parse_token(int sym) {
   static Token result;
 
   switch (sym) {
-  case '+':
-    RET_TOKEN(PLUS);
-
-  case '-':
-    RET_TOKEN(MINUS);
-
-  case '>':
-    RET_TOKEN(NEXT);
-
-  case '<':
-    RET_TOKEN(PREV);
-
-  case '.':
-    RET_TOKEN(PRINT);
-
-  case 'p':
-    RET_TOKEN(PRINT_NUMERICAL);
-
-  case 'P':
-    RET_TOKEN(PRINT_NUMERICAL_LN);
+    REG_TOKEN('+', PLUS);
+    REG_TOKEN('-', MINUS);
+    REG_TOKEN('>', NEXT);
+    REG_TOKEN('<', PREV);
+    REG_TOKEN('.', PRINT);
+    REG_TOKEN('p', PRINT_NUMERICAL);
+    REG_TOKEN('P', PRINT_NUMERICAL_LN);
 
   default:
     printf("Unexpected token: '%c'\n", sym);
@@ -117,30 +105,19 @@ int main(const int argc, char **argv) {
 
     printf("Compiling... %d%%\r", pr);
 
+    #define TOKEN2CALL(token, call) \
+      case token: \
+        strcpy(operation, #call); \
+        break
+
     switch (tokens.data[i]) {
-    case PLUS:
-      strcpy(operation, "add_cell");
-      break;
-    case MINUS:
-      strcpy(operation, "sub_cell");
-      break;
-
-    case NEXT:
-      strcpy(operation, "next_cell");
-      break;
-    case PREV:
-      strcpy(operation, "prev_cell");
-      break;
-
-    case PRINT:
-      strcpy(operation, "print_cell");
-      break;
-    case PRINT_NUMERICAL:
-      strcpy(operation, "print_num");
-      break;
-    case PRINT_NUMERICAL_LN:
-      strcpy(operation, "print_num_ln");
-      break;
+      TOKEN2CALL(PLUS, add_cell); 
+      TOKEN2CALL(MINUS, sub_cell);
+      TOKEN2CALL(NEXT, next_cell);
+      TOKEN2CALL(PREV, prev_cell);
+      TOKEN2CALL(PRINT, print_cell);
+      TOKEN2CALL(PRINT_NUMERICAL, print_num);
+      TOKEN2CALL(PRINT_NUMERICAL_LN, print_num_ln);
     }
 
     fprintf(output, "\tmov rdi, [vec]\n\tmov rsi, cell\n\tcall %s\n\n",
