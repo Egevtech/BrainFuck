@@ -7,6 +7,8 @@
 
 #include "vec.h"
 
+#define INPUT_FILENAME_LEN sizeof(argv[1])
+
 #ifndef BFSTD
 #define BFSTD "./libbfstd.a"
 #endif
@@ -49,15 +51,12 @@ Token *parse_token(int sym) {
 
 int main(const int argc, char **argv) {
   printf("BFC - brainfuck compiler\n");
-  printf("Linking stdlib from %s\n", BFSTD);
 
   if (argc != 2) {
     printf("USAGE: bfc FILE\n"
            "USAGE: FILE - file to compile\n");
     return EXIT_FAILURE;
   }
-
-  printf("Reading file %s\n", argv[1]);
 
   FILE *file = fopen(argv[1], "r");
 
@@ -86,7 +85,6 @@ int main(const int argc, char **argv) {
     vector_push(&tokens, *token);
   }
 
-  printf("Tokens parsed: %d\n", tokens.len);
 
   fclose(file);
 
@@ -94,7 +92,6 @@ int main(const int argc, char **argv) {
   strcpy(output_file, argv[1]);
   strcat(output_file, ".s");
 
-  printf("Opening output file %s\n", (char *)output_file);
   FILE *output = fopen(output_file, "w");
 
   if (output == NULL) {
@@ -183,7 +180,7 @@ int main(const int argc, char **argv) {
 
   free(fstdlib_name);
 
-  printf("Building... ");
+  printf("Building obj file... ");
 
   FILE *build_cmd_pipe = popen(compile_cmd, "r");
   if (build_cmd_pipe == NULL) {
@@ -196,18 +193,19 @@ int main(const int argc, char **argv) {
 
   int *build_result = malloc(sizeof(int));
   if ((*build_result = pclose(build_cmd_pipe)) != 0) {
-    printf("fail\nBuild failed with the exit code %d", *build_result);
+    printf("fail\nBuild failed with the exit code %d\n", *build_result);
     free(compile_cmd);
     free(link_cmd);
     free(build_result);
     free(output_file);
     return EXIT_FAILURE;
   }
+
   free(build_result);
   free(compile_cmd);
   printf("done\n");
 
-  printf("Linking... ");
+  printf("Linking a.out... ");
 
   FILE *link_cmd_pipe = popen(link_cmd, "r");
   if (link_cmd_pipe == NULL) {
@@ -219,7 +217,7 @@ int main(const int argc, char **argv) {
 
   int *link_result = malloc(sizeof(int));
   if ((*link_result = pclose(link_cmd_pipe)) != 0) {
-    printf("fail\nLink failed with the exit code %d", *link_result);
+    printf("fail\nLink failed with the exit code %d\n", *link_result);
 
     free(link_cmd);
     free(output_file);
@@ -232,5 +230,35 @@ int main(const int argc, char **argv) {
   free(link_cmd);
   free(link_result);
   free(output_file);
+
+  printf("Cleaning... ");
+
+  char* nasm_file = malloc(sizeof(char) * ( 4 + INPUT_FILENAME_LEN));
+  char* object_file = malloc(sizeof(char) * ( 6 + INPUT_FILENAME_LEN));
+  if (nasm_file == NULL | object_file == NULL) {
+    printf("fail\n");
+    perror("Allocation failed");
+
+    if (nasm_file == NULL) free(nasm_file);
+    if (object_file == NULL) free(object_file);
+
+    return EXIT_FAILURE;
+  }
+
+  sprintf(nasm_file, "./%s.s", argv[1]);
+  sprintf(object_file, "./%s.o", argv[1]);
+
+  if (remove(nasm_file) != 0 || remove(object_file) != 0) {
+    free(nasm_file);
+    free(object_file);
+    printf("fail\n");
+    perror("Cleaning failed");
+  }
+
+  free(nasm_file);
+  free(object_file);
+
+  printf("done\n");
+  
   return EXIT_SUCCESS;
 }
