@@ -14,7 +14,7 @@
 #endif
 
 #define REG_TOKEN(symbol, token_name) \
-  case symbol \
+  case symbol: \
     result = token_name; \
     return &result; \
     break
@@ -94,7 +94,7 @@ int main(const int argc, char **argv) {
   }
 
   const char *externs = "vector_init, next_cell, prev_cell, add_cell, "
-                        "sub_cell, print_cell, print_num, print_num_ln";
+                        "sub_cell, print_cell, print_cell_ln, print_cell_num, print_cell_num_ln";
 
   fprintf(
       output,
