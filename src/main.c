@@ -1,25 +1,15 @@
+#define _POSIX_C_SOURCE 200809L
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <threads.h>
+
+#include "vec.h"
 
 #ifndef BFSTD
-#define BFSTD "/usr/local/lib/libbfstd.a"
+#define BFSTD "./libbfstd.a"
 #endif
-
-// TODO: Move Token operations and vector from this file
-typedef enum {
-  PLUS,
-  MINUS,
-
-  NEXT,
-  PREV,
-
-  PRINT,
-  PRINT_NUMERICAL,
-  PRINT_NUMERICAL_LN,
-} Token;
 
 #define RET_TOKEN(token_name)                                                  \
   result = token_name;                                                         \
@@ -52,74 +42,14 @@ Token *parse_token(int sym) {
     RET_TOKEN(PRINT_NUMERICAL_LN);
 
   default:
-    printf("... nothing?\nUnexpected token: '%c'\n", sym);
+    printf("Unexpected token: '%c'\n", sym);
     return NULL;
   }
-}
-
-typedef struct {
-  Token *data;
-
-  int len;
-  int capacity;
-
-  int element_size;
-} TokenVector;
-
-TokenVector make_vector(void) {
-  const TokenVector tv = {
-      .data = malloc(sizeof(Token)),
-      .len = 0,
-      .capacity = sizeof(Token),
-      .element_size = sizeof(Token),
-  };
-
-  return tv;
-}
-
-void close_vector(TokenVector *vec) {
-  free(vec->data);
-  vec->len = 0;
-  vec->capacity = 0;
-}
-
-// TODO: if error, return nullptr, don't escape program here
-void vector_push(TokenVector *vec, const Token token) {
-
-  // printf("%d * %d (%d) = %d (needs %d)\n", vec->len, vec->element_size,
-  // vec->len * vec->element_size, vec->capacity, (vec->len + 1) *
-  // vec->element_size);
-  if (vec->capacity < vec->len * vec->element_size) {
-    printf("Abnormally vector size!\n");
-
-    close_vector(vec);
-    exit(EXIT_FAILURE);
-  }
-
-  vec->len++;
-
-  if (vec->capacity < vec->len * vec->element_size) {
-    vec->data = reallocarray(vec->data, vec->len, vec->element_size);
-    vec->capacity = vec->len * vec->element_size;
-  }
-
-  vec->data[vec->len - 1] = token;
-}
-
-Token *vector_pop(TokenVector *vec) {
-  if (vec->len == 0) {
-    printf("Trying to pop an empty vector!\n");
-    return NULL;
-  }
-
-  vec->len--;
-
-  printf("New len: %d\n", vec->len);
-  return &vec->data[vec->len - 1];
 }
 
 int main(const int argc, char **argv) {
   printf("BFC - brainfuck compiler\n");
+  printf("Linking stdlib from %s\n", BFSTD);
 
   if (argc != 2) {
     printf("USAGE: bfc FILE\n"
@@ -220,12 +150,12 @@ int main(const int argc, char **argv) {
             operation);
   }
 
+  close_vector(&tokens);
+
   free(operation);
 
   fprintf(output, "\tmov rax, 60\n\tmov rdi, 0\n\tsyscall");
   fclose(output);
-
-  close_vector(&tokens); // TODO: Check if this is on its place
 
   printf("Compiling... done\n");
 
@@ -233,13 +163,25 @@ int main(const int argc, char **argv) {
   const char *link_cmd_pattern = "ld %s.o %s -o a.out -lc "
                                  "-dynamic-linker /lib64/ld-linux-x86-64.so.2";
 
-  char *compile_cmd =
-      malloc(strlen(compile_cmd_pattern) + strlen(argv[1]) * 2 + 1);
-  char *link_cmd = malloc(strlen(link_cmd_pattern) + strlen(argv[1]) * 2 + 1 +
-                          strlen(BFSTD));
+  char *compile_cmd = malloc(strlen(compile_cmd_pattern) + strlen(argv[1]) * 2 + 1);
+  char *link_cmd = malloc(strlen(link_cmd_pattern) + 
+    strlen(argv[1]) * 2 + 1 + strlen(BFSTD));
+
+  FILE* stdlib_file = fopen(BFSTD, "r");
+  char* fstdlib_name = malloc(sizeof(char) * 30);
+
+  if (stdlib_file == NULL) {
+    strcpy(fstdlib_name, "/usr/local/lib/libbfstd.a");
+    free(stdlib_file);
+  } else {
+    strcpy(fstdlib_name, BFSTD);
+    fclose(stdlib_file);
+  }
 
   sprintf(compile_cmd, compile_cmd_pattern, argv[1], argv[1]);
-  sprintf(link_cmd, link_cmd_pattern, argv[1], BFSTD, argv[1]);
+  sprintf(link_cmd, link_cmd_pattern, argv[1], fstdlib_name, argv[1]);
+
+  free(fstdlib_name);
 
   printf("Building... ");
 

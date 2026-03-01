@@ -43,7 +43,7 @@ void vector_push(struct DataVector *vec, int push_data)
 
     if ( vec->capacity < vec->len * sizeof(int))
     {
-        vec->data = reallocarray(vec->data, vec->len, sizeof(int));
+        vec->data = realloc(vec->data, vec->len * sizeof(int));
         vec->capacity = vec->len * sizeof(int);
     }
 
