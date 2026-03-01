@@ -1,31 +1,4 @@
-<a name="EN"></a>
-# BrainFuck compiler [EN/[RU](#RU)]
-This repository contains my implementation of brainfuck compiler
-
-> [!WARNING]
-> This project currently in development stage
-
-## Project status
-- [X] Compiling brainfuck code into assembler 
-- [X] Building executable file
-- [ ] Loop instructions
-- [ ] Input instructions
-- [ ] Some custom instructions
-
-## FULL compatibility with the original project is planned.
-Now, there are basic instructions from the BrainFuck:
-- `>` - select next cell
-- `<` - select prev cell
-- `+` - add one to selected cell
-- `-` - subtract one from selected cell
-- `.` - print data in cell as char
-
-But, there are also some custom ones:
-- `p` - print number in the current cell
-- `P` - similar to `p`, but with `\n` added to the end
-
-<a name="RU"></a>
-# Компилятор BrainFuck[[EN](#EN)/RU]
+# Компилятор BrainFuck
 В этом репозитории находится моя версия компилятора языка программирования BrainFuck
 
 > [!WARNING]
@@ -38,7 +11,7 @@ But, there are also some custom ones:
 - [ ] Инструкции ввода
 - [ ] Несколько кастомных инструкций
 
-## В планах обеспечить ПОЛНУЮ совместимость с оригинальным проектом
+### В планах обеспечить ПОЛНУЮ совместимость с оригинальным проектом
 Сейчас компилятор поддерживает базовые инструкции из BrainFuck:
 - `>` - выбрать следующую ячейку
 - `<` - выбрать предыдущую ячейку
@@ -49,3 +22,8 @@ But, there are also some custom ones:
 Но есть и несколько добавленных мной инструкций
 - `p` - Напечатать число из выбранной ячейки
 - `P` - Напечатать число из выбранной ячейки, но добавить перенос строки в конец
+
+## Сборка/установка
+- ```xmake``` - собрать компилятор и стандартную библиотеку. 
+- - Запуск: ```./bfc```
+- ```xmake && xmake install``` - установить компилятор и стандартную библиотеку в /usr/local/ lib/ и /bin
