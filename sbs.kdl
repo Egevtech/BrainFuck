@@ -1,0 +1,18 @@
+name "BrainFuck"
+
+targets {
+    bfc {
+        sources "src/main.c" "src/vec.c"
+
+        install-directory "/usr/local/bin/"
+    }
+    bfstd {
+        sources "src/stdlib/stdlib.c"
+
+        compile-args "-std=c23" "-Wall"
+
+        install-directory "/usr/local/lib/"
+
+        type "static"
+        }
+    }

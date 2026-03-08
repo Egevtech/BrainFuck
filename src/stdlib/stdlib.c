@@ -84,8 +84,7 @@ void next_cell(struct DataVector* vec, int *current_cell)
 
 void prev_cell(struct DataVector *, int *current_cell)
 {
-    if (*current_cell == 0)
-    {
+    if (*current_cell == 0) {
         printf("No space to move left!\n");
 
         exit(EXIT_FAILURE);

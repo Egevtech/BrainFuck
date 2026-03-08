@@ -1,14 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
 
-/*
- * Важное замечание от автора
- * Сейчас программа работает нестабильно, непонятно и т.п.
- * Проект будет заброшен как минимум на эту неделю, потому вот так вот.
- * Починю потом, наверное
- *
- * не поминайте лихом
- */
-
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -68,8 +59,7 @@ int main(const int argc, char **argv) {
 
   if (strcmp(argv[1], "run") == 0) {
       need_run = 1;
-  } else if (strcmp(argv[1], "build") != 0)
-  {
+  } else if (strcmp(argv[1], "build") != 0) {
     // TODO: я переделаю это потом и сделаю нормальный обработчик
     printf("Invalid usage. Available modes are: run, build\n");
     return EXIT_FAILURE;
@@ -106,8 +96,7 @@ int main(const int argc, char **argv) {
   fclose(file);
 
   char *output_file = malloc(sizeof(char) * (strlen(output_file_arg) + 2));
-  strcpy(output_file, output_file_arg);
-  strcat(output_file, ".s");
+  sprintf(output_file, "%s.s", output_file);
 
   FILE *output = fopen(output_file, "w");
   free(output_file);
@@ -118,7 +107,8 @@ int main(const int argc, char **argv) {
   }
 
   const char *externs = "vector_init, next_cell, prev_cell, add_cell, "
-                        "sub_cell, print_cell, print_cell_ln, print_cell_num, print_cell_num_ln";
+                        "sub_cell, print_cell, print_cell_ln, print_cell_num, "
+                        "print_cell_num_ln";
 
   fprintf(
       output,
